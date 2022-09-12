@@ -23,6 +23,10 @@ namespace App\Http\Controllers\Api;
  * )
  * 
  * @OA\Tag(
+ *     name="Categories",
+ *     description="API Endpoints of Categories"
+ * )
+ * @OA\Tag(
  *     name="Projects",
  *     description="API Endpoints of Projects"
  * )

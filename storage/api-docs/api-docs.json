@@ -23,6 +23,10 @@
     },
     "tags": [
         {
+            "name": "Categories",
+            "description": "API Endpoints of Categories"
+        },
+        {
             "name": "Projects",
             "description": "API Endpoints of Projects"
         }
