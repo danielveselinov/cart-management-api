@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\Product\Http\Controllers\Api\V1\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +17,8 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/product', function (Request $request) {
     return $request->user();
+});
+
+Route::group(['prefix' => 'v1'], function() {
+    Route::apiResource('product', ProductController::class);
 });
