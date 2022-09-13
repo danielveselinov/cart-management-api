@@ -7,10 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    <p>Hello!</p>
+    <h2>Hello!</h2>
     <p>This is our daily email notification about 10 latest products added to the store.</p>
     @foreach ($products as $product)
-        <p><strong>{{ $product->name }}</strong></p>
+        <p style="font-size: 14px; margin-bottom: 0px;"><strong>{{ $product->name }}</strong></p>
     @endforeach
 </body>
 </html>

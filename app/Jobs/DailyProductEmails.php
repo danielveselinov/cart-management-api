@@ -23,9 +23,8 @@ class DailyProductEmails implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(public $products = [])
+    public function __construct()
     {
-        $this->products = $products;
     }
 
     /**
@@ -40,7 +39,7 @@ class DailyProductEmails implements ShouldQueue
                     ->latest()
                     ->limit(10)
                     ->get();
-        
+
         foreach (User::all() as $user) {
             Mail::to($user->email)->send(new NewProductsArrival($products));
         }
