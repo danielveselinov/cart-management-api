@@ -4,7 +4,7 @@ namespace Modules\Product\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Producy extends JsonResource
+class ProductResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

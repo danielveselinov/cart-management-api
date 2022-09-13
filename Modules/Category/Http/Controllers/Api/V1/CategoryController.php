@@ -2,7 +2,6 @@
 
 namespace Modules\Category\Http\Controllers\Api\V1;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Category\Entities\Category;
@@ -36,7 +35,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return new CategoryResource(Category::all());
+        return response()->json(new CategoryResource(Category::all()), Response::HTTP_ACCEPTED);
     }
 
        /**
@@ -113,7 +112,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return new CategoryResource($category);
+        return response()->json(new CategoryResource($category), Response::HTTP_ACCEPTED);
     }
 
     /**
