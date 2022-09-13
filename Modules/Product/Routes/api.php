@@ -21,4 +21,5 @@ Route::middleware('auth:api')->get('/product', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function() {
     Route::apiResource('product', ProductController::class);
+    Route::get('filter', [ProductController::class, 'filter']);
 });

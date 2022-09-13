@@ -2,12 +2,13 @@
 
 namespace Modules\Product\Http\Controllers\Api\V1;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Product\Entities\Product;
+use Modules\Product\Transformers\ProductResource;
 use Modules\Product\Http\Requests\CreateProductRequest;
 use Modules\Product\Http\Requests\UpdateProductRequest;
-use Modules\Product\Transformers\ProductResource;
 
 class ProductController extends Controller
 {
@@ -77,5 +78,30 @@ class ProductController extends Controller
         $product->delete();
         
         return response()->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * Filter the specified resource from storage.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function filter(Request $request)
+    {
+        $query = Product::with(['category']);
+        
+        if ($request->product) {
+            $query->where('name', 'LIKE', '%' . $request->product . '%');
+        }
+
+        if ($request->category) {
+            $query->WhereHas('category', function($query) use($request) {
+                $query->where('name', 'LIKE', '%' . $request->category . '%');
+            });
+        }
+        
+        $products = $query->get();
+
+        return response()->json(new ProductResource($products), Response::HTTP_ACCEPTED);
     }
 }
