@@ -245,9 +245,7 @@
                         "description": "Forbidden"
                     }
                 }
-            }
-        },
-        "/api/v1/prouct": {
+            },
             "post": {
                 "tags": [
                     "Products"
@@ -504,6 +502,40 @@
                 },
                 "type": "object"
             },
+            "CategoryCollection": {
+                "title": "CategoryCollection",
+                "description": "Category collection",
+                "properties": {
+                    "categories": {
+                        "description": "Category Collection",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryResource"
+                        }
+                    },
+                    "pagination": {
+                        "properties": {
+                            "total": {
+                                "type": "integer"
+                            },
+                            "count": {
+                                "type": "integer"
+                            },
+                            "per_page": {
+                                "type": "integer"
+                            },
+                            "current_page": {
+                                "type": "integer"
+                            },
+                            "total_page": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
             "CategoryResource": {
                 "title": "CategoryResource",
                 "description": "Category resource",
@@ -531,7 +563,7 @@
                     "category_id": {
                         "title": "Product Category ID",
                         "description": "ID of the category",
-                        "example": "lorem"
+                        "example": "999"
                     },
                     "name": {
                         "title": "Product name",
@@ -599,6 +631,40 @@
                 "nullable": [
                     "old_price"
                 ]
+            },
+            "ProductCollection": {
+                "title": "ProductCollection",
+                "description": "Product collection",
+                "properties": {
+                    "products": {
+                        "description": "Product Collection",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ProductResource"
+                        }
+                    },
+                    "pagination": {
+                        "properties": {
+                            "total": {
+                                "type": "integer"
+                            },
+                            "count": {
+                                "type": "integer"
+                            },
+                            "per_page": {
+                                "type": "integer"
+                            },
+                            "current_page": {
+                                "type": "integer"
+                            },
+                            "total_page": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
             },
             "ProductResource": {
                 "title": "ProductResource",

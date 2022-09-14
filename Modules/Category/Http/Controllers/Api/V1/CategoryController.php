@@ -9,6 +9,7 @@ use Modules\Category\Entities\Category;
 use Modules\Category\Http\Requests\CreateCategoryRequest;
 use Modules\Category\Http\Requests\UpdateCategoryRequest;
 use Modules\Category\Transformers\CategoryResource;
+use Modules\Product\Transformers\ProductCollection;
 
 class CategoryController extends Controller
 {
@@ -36,7 +37,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return new CategoryResource(Category::all());
+        return response()->json(new ProductCollection(Category::paginate()), Response::HTTP_ACCEPTED);
     }
 
     /**

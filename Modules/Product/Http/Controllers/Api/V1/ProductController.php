@@ -9,6 +9,7 @@ use Modules\Product\Entities\Product;
 use Modules\Product\Transformers\ProductResource;
 use Modules\Product\Http\Requests\CreateProductRequest;
 use Modules\Product\Http\Requests\UpdateProductRequest;
+use Modules\Product\Transformers\ProductCollection;
 
 class ProductController extends Controller
 {
@@ -36,12 +37,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return new ProductResource(Product::with('category')->get());
+        return response()->json(new ProductCollection(Product::paginate()), Response::HTTP_ACCEPTED);
     }
 
     /**
      * @OA\Post(
-     *      path="/api/v1/prouct",
+     *      path="/api/v1/product",
      *      operationId="storeProduct",
      *      tags={"Products"},
      *      summary="Store new product",

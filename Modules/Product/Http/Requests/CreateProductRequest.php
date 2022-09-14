@@ -22,7 +22,7 @@ class CreateProductRequest extends FormRequest
      *      property="category_id",
      *      title="Product Category ID",
      *      description="ID of the category",
-     *      example="lorem"
+     *      example="999"
      * ),
      * @OA\Property(
      *      property="name", 
