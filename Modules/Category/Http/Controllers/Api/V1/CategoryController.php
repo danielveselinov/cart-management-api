@@ -14,7 +14,7 @@ class CategoryController extends Controller
 {
     /**
      * @OA\Get(
-     *      path="/categories",
+     *      path="/api/v1/category",
      *      operationId="getCategoriesList",
      *      tags={"Categories"},
      *      summary="Get list of categories",
@@ -39,9 +39,9 @@ class CategoryController extends Controller
         return new CategoryResource(Category::all());
     }
 
-       /**
+    /**
      * @OA\Post(
-     *      path="/category",
+     *      path="/api/v1/category",
      *      operationId="storeCategory",
      *      tags={"Categories"},
      *      summary="Store new category",
@@ -78,7 +78,7 @@ class CategoryController extends Controller
 
     /**
      * @OA\Get(
-     *      path="/categories/{id}",
+     *      path="/api/v1/category/{id}",
      *      operationId="getCategoryById",
      *      tags={"Categories"},
      *      summary="Get category information",
@@ -118,7 +118,7 @@ class CategoryController extends Controller
 
     /**
      * @OA\Put(
-     *      path="/category/{id}",
+     *      path="/api/v1/category/{id}",
      *      operationId="updateCategory",
      *      tags={"Categories"},
      *      summary="Update existing category",
@@ -166,9 +166,9 @@ class CategoryController extends Controller
         return response()->json(new CategoryResource($category), Response::HTTP_ACCEPTED);
     }
 
-        /**
+    /**
      * @OA\Delete(
-     *      path="/category/{id}",
+     *      path="/api/v1/category/{id}",
      *      operationId="deleteCategory",
      *      tags={"Categories"},
      *      summary="Delete existing category",
