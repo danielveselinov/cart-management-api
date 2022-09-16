@@ -3,58 +3,64 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use Modules\Category\Entities\Category;
 use Tests\TestCase;
 
 class CategoryTest extends TestCase
 {
-    // category.index - category.store - category.show - category.update - category.destory
-
+    use RefreshDatabase;
+    
     public function test_get_categories()
     {
-        $response = $this->getJson(route('category.index'));
-        $response->assertJson([]);
-
-        $response->assertStatus(202);
+        $this->getJson(route('category.index'))
+            ->assertJson([])
+            ->assertStatus(Response::HTTP_ACCEPTED);
     }
 
     public function test_store_a_category()
     {
-        $response = $this->postJson(route("category.store"), [
-            'name' => 'category_test'
-        ]);
-        $response->assertJson([]);
+        $category = Category::factory()->create();
 
-        $response->assertStatus(202);
+        $this->postJson(route("category.store"), ['name' => $category->name])
+            ->assertJson(['name' => $category->name])
+            ->assertStatus(Response::HTTP_ACCEPTED);
     }
+
+    // public function test_store_a_category_without_name()
+    // {
+    //     $this->postJson(route("category.store"), [
+    //         'name' => null
+    //     ])->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+    //     ->assertJson([]);
+    // }
 
     public function test_show_a_category()
     {
-        $category = Category::where('name', '=', 'category_test')->first();
-        $reesponse = $this->getJson(route('category.show', $category->id));
-        $reesponse->assertDontSee([]);
+        $category = Category::factory()->create();
 
-        $reesponse->assertStatus(202);
+        $this->getJson(route('category.show', $category->id))
+            ->assertStatus(Response::HTTP_ACCEPTED)
+            ->assertJson(['name' => $category->name]);
     }
 
     public function test_update_a_category()
     {
-        $category = Category::where('name', '=', 'category_test')->first();
-        $response = $this->putJson(route('category.update', $category->id), [
-            'name' => 'category_updated'
-        ]);
-        $response->assertDontSee([]);
+        $category = Category::factory()->create();
 
-        $response->assertStatus(202);
+        $this->putJson(route('category.update', $category->id), [
+            'name' => 'category_updated',
+        ])->assertStatus(Response::HTTP_ACCEPTED);
+
+        $this->getJson(route('category.show', $category->id))
+            ->assertJson(['name' => 'category_updated']);
     }
 
     public function test_destory_a_category()
     {
-        $category = Category::where('name', '=', 'category_updated')->first();
-        $response = $this->deleteJson(route('category.destroy', $category->id));
-        $response->assertNoContent();
+        $category = Category::factory()->create();
 
-        $response->assertStatus(204);
+        $this->deleteJson(route('category.destroy', $category->id))
+            ->assertStatus(Response::HTTP_NO_CONTENT);
     }
 }
