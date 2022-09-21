@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Events\ResendPasswordCode;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\Auth\LoginRequest;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\ResendForgotPasswordRequest;
+use App\Http\Requests\ResendVerificationCodeRequest;
 
 class AuthController extends Controller
 {
@@ -21,15 +25,14 @@ class AuthController extends Controller
             ->orWhere('phone_number', $request->login)
             ->first();
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'The given data was invalid.']);
         }
 
-        if (! $user->is_active) {
+        if (!$user->is_active) {
             return response()->json(['message' => 'Please verify your account.']);
         }
 
-        // create token
         $authToken = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json(['access_token' => $authToken], Response::HTTP_ACCEPTED);
@@ -58,7 +61,7 @@ class AuthController extends Controller
             ->where('verification_code', '=', $request->code)
             ->first();
 
-        if (! $user) {
+        if (!$user) {
             return response()->json(['message' => 'The given data was invalid.']);
         }
 
@@ -69,6 +72,70 @@ class AuthController extends Controller
 
         return response()->json($user, Response::HTTP_CREATED);
     }
+
+    public function resendVerificationCode(ResendVerificationCodeRequest $request)
+    {
+        $user = User::whereEmail($request->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'The given data was invalid.']);
+        }
+
+        $user->verification_code = rand(1000, 9999);
+        $user->save();
+
+        event(new Registered($user));
+
+        return response()->json(['message' => 'The code was sent to your email account: ' . $request->email]);
+    }
+
+    public function forgetPassword(ResendForgotPasswordRequest $request)
+    {
+        $user = User::whereEmail($request->email)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'The given data was invalid.']);
+        }
+
+        $code = Str::random(64);
+
+        DB::table('password_resets')->insert([
+            'email' => $request->email,
+            'token' => $code,
+            'created_at' => now()
+        ]);
+
+        event(new ResendPasswordCode($user, $code));
+
+        return response()->json(['message' => 'The code was sent to your email account: ' . $request->email]);
+    }
+
+    // public function submitResetPasswordForm(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|email|exists:users',
+    //         'password' => 'required|string|min:6|confirmed',
+    //         'password_confirmation' => 'required'
+    //     ]);
+
+    //     $updatePassword = DB::table('password_resets')
+    //         ->where([
+    //             'email' => $request->email,
+    //             'token' => $request->token
+    //         ])
+    //         ->first();
+
+    //     if (!$updatePassword) {
+    //         return back()->withInput()->with('error', 'Invalid token!');
+    //     }
+
+    //     $user = User::where('email', $request->email)
+    //         ->update(['password' => Hash::make($request->password)]);
+
+    //     DB::table('password_resets')->where(['email' => $request->email])->delete();
+
+    //     return redirect('/login')->with('message', 'Your password has been changed!');
+    // }
 
     public function logout(Request $request)
     {
