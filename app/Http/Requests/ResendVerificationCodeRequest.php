@@ -4,6 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *      title="ResendVerificationCodeRequest",
+ *      description="Resend verification code via email",
+ *      type="object",
+ *      required={"email"}
+ * )
+ */
 class ResendVerificationCodeRequest extends FormRequest
 {
     /**
@@ -18,7 +26,14 @@ class ResendVerificationCodeRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
+     * 
+     * @OA\Property(
+     *      property="email",
+     *      title="Email address",
+     *      description="Enter your email address to continue",
+     *      example="john.doe@example.com"
+     * ),
+     * 
      * @return array<string, mixed>
      */
     public function rules()

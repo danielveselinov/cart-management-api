@@ -4,6 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *      title="ResendForgotPasswordRequest",
+ *      description="Resend verification token via email",
+ *      type="object",
+ *      required={"email"}
+ * )
+ */
 class ResendForgotPasswordRequest extends FormRequest
 {
     /**
@@ -18,6 +26,13 @@ class ResendForgotPasswordRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
+     * 
+     * @OA\Property(
+     *      property="email",
+     *      title="Email address",
+     *      description="Enter your email address to continue",
+     *      example="john.doe@example.com"
+     * ),
      *
      * @return array<string, mixed>
      */

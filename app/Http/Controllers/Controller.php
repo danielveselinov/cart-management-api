@@ -26,6 +26,11 @@ use Illuminate\Routing\Controller as BaseController;
  * )
  * 
  * @OA\Tag(
+ *      name="Users",
+ *      description="API Endpoints for Authentication"
+ * )
+ * 
+ * @OA\Tag(
  *      name="Categories",
  *      description="API Endpoints of Categories"
  * )
