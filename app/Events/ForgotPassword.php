@@ -10,20 +10,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ResendPasswordCode
+class ForgotPassword
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
-    public $code;
     /**
      * Create a new event instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  string $code
      * @return void
      */
-    public function __construct($user, $code)
+    public function __construct(public $user, public $code)
     {
         $this->user = $user;
         $this->code = $code;
@@ -38,5 +34,4 @@ class ResendPasswordCode
     {
         return new PrivateChannel('channel-name');
     }
-
 }

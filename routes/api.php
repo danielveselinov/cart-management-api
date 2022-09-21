@@ -21,13 +21,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function() {
     Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout'])->middleware(['auth:sanctum']);
     Route::post('register', [AuthController::class, 'register']);
-    Route::post('logout', [AuthController::class, 'logout']);
 
     Route::put('verify-account', [AuthController::class, 'verifyAccount']);
     Route::post('resend-code', [AuthController::class, 'resendVerificationCode']);
 
     Route::post('forget-password', [AuthController::class, 'forgetPassword']);
-
+    Route::post('reset-password', [AuthController::class, 'resetPassword']);
 });
 

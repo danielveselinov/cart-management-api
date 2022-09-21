@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Events\ResendPasswordCode;
+use App\Events\ForgotPassword;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -16,6 +16,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\ResendForgotPasswordRequest;
 use App\Http\Requests\ResendVerificationCodeRequest;
+use App\Http\Requests\ResetPasswordRequest;
 
 class AuthController extends Controller
 {
@@ -105,37 +106,31 @@ class AuthController extends Controller
             'created_at' => now()
         ]);
 
-        event(new ResendPasswordCode($user, $code));
+        event(new ForgotPassword($user, $code));
 
         return response()->json(['message' => 'The code was sent to your email account: ' . $request->email]);
     }
 
-    // public function submitResetPasswordForm(Request $request)
-    // {
-    //     $request->validate([
-    //         'email' => 'required|email|exists:users',
-    //         'password' => 'required|string|min:6|confirmed',
-    //         'password_confirmation' => 'required'
-    //     ]);
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        $user = DB::table('password_resets')
+            ->where([
+                'email' => $request->email,
+                'token' => $request->token
+            ])
+            ->first();
 
-    //     $updatePassword = DB::table('password_resets')
-    //         ->where([
-    //             'email' => $request->email,
-    //             'token' => $request->token
-    //         ])
-    //         ->first();
+        if (!$user) {
+            return response()->json(['message' => 'The given data was invalid.']);
+        }
 
-    //     if (!$updatePassword) {
-    //         return back()->withInput()->with('error', 'Invalid token!');
-    //     }
+        $user = User::where('email', $request->email)
+            ->update(['password' => Hash::make($request->password)]);
 
-    //     $user = User::where('email', $request->email)
-    //         ->update(['password' => Hash::make($request->password)]);
+        DB::table('password_resets')->where(['email' => $request->email])->delete();
 
-    //     DB::table('password_resets')->where(['email' => $request->email])->delete();
-
-    //     return redirect('/login')->with('message', 'Your password has been changed!');
-    // }
+        return response()->json(['success' => true, 'message' => 'Password updated']);
+    }
 
     public function logout(Request $request)
     {

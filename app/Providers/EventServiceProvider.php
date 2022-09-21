@@ -2,13 +2,9 @@
 
 namespace App\Providers;
 
-use App\Events\ResendPasswordCode;
 use App\Listeners\SendEmailVerification;
-use App\Listeners\SendPasswordResetCode;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -21,8 +17,8 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerification::class,
         ],
-        ResendPasswordCode::class => [
-            SendPasswordResetCode::class,
+        \App\Events\ForgotPassword::class => [
+            \App\Listeners\SendResetPasswordCode::class
         ],
     ];
 
