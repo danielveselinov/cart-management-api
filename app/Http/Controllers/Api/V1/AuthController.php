@@ -272,7 +272,7 @@ class AuthController extends Controller
 
         event(new ForgotPassword($user, $code));
 
-        return response()->json(['message' => 'The code was sent to your email account: ' . $request->email]);
+        return response()->json(['message' => 'The code was sent to your email account: ' . $request->email], Response::HTTP_OK);
     }
 
     /**
