@@ -20,14 +20,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'v1'], function() {
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('logout', [AuthController::class, 'logout'])->middleware(['auth:sanctum']);
-    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('logout', [AuthController::class, 'logout'])->middleware(['auth:sanctum'])->name('auth.logout');
+    Route::post('register', [AuthController::class, 'register'])->name('auth.register');
 
-    Route::put('verify-account', [AuthController::class, 'verifyAccount']);
-    Route::post('resend-code', [AuthController::class, 'resendVerificationCode']);
+    Route::put('verify-account', [AuthController::class, 'verifyAccount'])->name('auth.verify-account');
+    Route::post('resend-code', [AuthController::class, 'resendVerificationCode'])->name('auth.resend-code');
 
-    Route::post('forget-password', [AuthController::class, 'forgetPassword']);
-    Route::post('reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('forget-password', [AuthController::class, 'forgetPassword'])->name('auth.forget-password');
+    Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('auth.reset-password');
 });
 
