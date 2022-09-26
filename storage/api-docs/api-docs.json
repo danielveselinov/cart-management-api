@@ -468,6 +468,265 @@
                     }
                 }
             }
+        },
+        "/api/v1/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Login an existing user",
+                "description": "Generates a Bearer auth token for the user",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "New token being created"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/register": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Register a new user",
+                "description": "Register a new user into our database",
+                "operationId": "register",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "New resources being created"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/verify-account": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update (activate) existing user",
+                "description": "Returns updated user",
+                "operationId": "verifyAccount",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "User id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "verification_code",
+                        "in": "path",
+                        "description": "Generateed code",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CategoryResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/resend-code": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Resend a verification code",
+                "description": "Resend a veriication code via email",
+                "operationId": "resendCode",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ResendVerificationCodeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/forget-password": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Resend a verification token",
+                "description": "Resend a veriication token via email",
+                "operationId": "forgetPassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ResendForgotPasswordRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/reset-password": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Reset password",
+                "description": "Reset password",
+                "operationId": "resetPassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ResetPasswordRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/logout": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Logout",
+                "description": "Destor current access (bearer) token",
+                "operationId": "logout",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "description": "Bearer token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -693,10 +952,121 @@
                     }
                 },
                 "type": "object"
+            },
+            "LoginRequest": {
+                "title": "LoginRequest",
+                "description": "Login user request",
+                "required": [
+                    "login",
+                    "password"
+                ],
+                "properties": {
+                    "login": {
+                        "title": "Email address or Phone Number",
+                        "description": "Enter your email address or phone number",
+                        "example": "john.doe@example.com"
+                    },
+                    "password": {
+                        "title": "Password",
+                        "description": "Enter your password",
+                        "example": "password"
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterRequest": {
+                "title": "RegisterRequest",
+                "description": "Register a new user",
+                "required": [
+                    "name",
+                    "email",
+                    "phone_number",
+                    "password"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "Full name",
+                        "description": "Enter your full name"
+                    },
+                    "email": {
+                        "title": "Email address",
+                        "description": "Enter your email address"
+                    },
+                    "phone_number": {
+                        "title": "Phone Number",
+                        "description": "Enter your phone number"
+                    },
+                    "password": {
+                        "title": "Password",
+                        "description": "Enter a password for your account"
+                    }
+                },
+                "type": "object"
+            },
+            "ResendForgotPasswordRequest": {
+                "title": "ResendForgotPasswordRequest",
+                "description": "Resend verification token via email",
+                "required": [
+                    "email"
+                ],
+                "properties": {
+                    "email": {
+                        "title": "Email address",
+                        "description": "Enter your email address to continue",
+                        "example": "john.doe@example.com"
+                    }
+                },
+                "type": "object"
+            },
+            "ResendVerificationCodeRequest": {
+                "title": "ResendVerificationCodeRequest",
+                "description": "Resend verification code via email",
+                "required": [
+                    "email"
+                ],
+                "properties": {
+                    "email": {
+                        "title": "Email address",
+                        "description": "Enter your email address to continue",
+                        "example": "john.doe@example.com"
+                    }
+                },
+                "type": "object"
+            },
+            "ResetPasswordRequest": {
+                "title": "ResetPasswordRequest",
+                "description": "Reset password request",
+                "required": [
+                    "email"
+                ],
+                "properties": {
+                    "token": {
+                        "title": "Token",
+                        "description": "Enter token"
+                    },
+                    "email": {
+                        "title": "Email address",
+                        "description": "Enter your email address to continue",
+                        "example": "john.doe@example.com"
+                    },
+                    "password": {
+                        "title": "New password",
+                        "description": "Enter your new password"
+                    },
+                    "password_confirmation": {
+                        "title": "Password Confirmation",
+                        "description": "Repeat your password"
+                    }
+                },
+                "type": "object"
             }
         }
     },
     "tags": [
+        {
+            "name": "Users",
+            "description": "API Endpoints for Authentication"
+        },
         {
             "name": "Categories",
             "description": "API Endpoints of Categories"

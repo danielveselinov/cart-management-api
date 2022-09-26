@@ -20,7 +20,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone_number',
+        'image_path',
         'password',
+        'verification_code',
     ];
 
     /**
@@ -41,4 +44,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getProfilePicture()
+    {
+        $image_path = ($this->image_path) ? "/storage/{$this->image_path}" : asset('images/default-avatar-profile-image.jpg');
+
+        return $image_path;
+    }
 }
