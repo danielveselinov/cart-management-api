@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Listeners\SendEmailVerification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Modules\Cart\Events\OrderPlaced;
+use Modules\Cart\Listeners\SendOrderPlaceNotification;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\ForgotPassword::class => [
             \App\Listeners\SendResetPasswordCode::class
+        ],
+        OrderPlaced::class => [
+            SendOrderPlaceNotification::class,
         ],
     ];
 
