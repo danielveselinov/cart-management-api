@@ -12,7 +12,6 @@ use Modules\Cart\Entities\CartItems;
 use Modules\Cart\Entities\Order;
 use Modules\Cart\Entities\OrderItems;
 use Modules\Cart\Events\OrderPlaced;
-use Modules\Cart\Http\Requests\DestroyCartItemRequest;
 use Modules\Cart\Http\Requests\StoreCartItemRequest;
 use Modules\Cart\Http\Requests\UpdateCartItemRequest;
 use Modules\Product\Entities\Product;
@@ -98,7 +97,7 @@ class CartController extends Controller
         $user->cart->delete();
 
         event(new OrderPlaced($user)); // fire this event to send a email
-        
+
         return response()->json(['message' => 'Order successfully placed!'], Response::HTTP_OK);
     }
 }
