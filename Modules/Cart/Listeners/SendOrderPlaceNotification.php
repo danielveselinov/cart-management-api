@@ -5,6 +5,8 @@ namespace Modules\Cart\Listeners;
 use Modules\Cart\Events\OrderPlaced;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Mail;
+use Modules\Cart\Emails\OrderPlacedNotification;
 
 class SendOrderPlaceNotification
 {
@@ -26,6 +28,6 @@ class SendOrderPlaceNotification
      */
     public function handle(OrderPlaced $event)
     {
-        //
+        Mail::to($event->user->email)->send(new OrderPlacedNotification($event->user));
     }
 }

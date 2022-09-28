@@ -13,9 +13,9 @@ class OrderPlaced
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(public $user)
     {
-        //
+        $this->user = $user;
     }
 
     /**

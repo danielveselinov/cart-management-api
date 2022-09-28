@@ -97,7 +97,8 @@ class CartController extends Controller
         $user->cart->items()->delete();
         $user->cart->delete();
 
-        // event(new OrderPlaced()); // fire this event to send a email
+        event(new OrderPlaced($user)); // fire this event to send a email
+        
         return response()->json(['message' => 'Order successfully placed!'], Response::HTTP_OK);
     }
 }

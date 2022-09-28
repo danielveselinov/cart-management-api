@@ -16,9 +16,9 @@ class OrderPlacedNotification extends Mailable implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(public $user)
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -28,6 +28,6 @@ class OrderPlacedNotification extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->view('cart::emails.order-placed');
     }
 }
