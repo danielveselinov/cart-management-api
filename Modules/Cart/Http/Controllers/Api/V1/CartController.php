@@ -2,15 +2,20 @@
 
 namespace Modules\Cart\Http\Controllers\Api\V1;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Entities\Cart;
 use Modules\Cart\Entities\CartItems;
+use Modules\Cart\Entities\Order;
+use Modules\Cart\Entities\OrderItems;
+use Modules\Cart\Events\OrderPlaced;
 use Modules\Cart\Http\Requests\DestroyCartItemRequest;
 use Modules\Cart\Http\Requests\StoreCartItemRequest;
 use Modules\Cart\Http\Requests\UpdateCartItemRequest;
+use Modules\Product\Entities\Product;
 
 class CartController extends Controller
 {
@@ -77,6 +82,22 @@ class CartController extends Controller
 
     public function checkout()
     {
-        
+        $user = User::where('id', Auth::id())->first();
+        $order = Order::firstOrCreate(['user_id' => $user->cart->id]);
+        foreach ($user->cart->items as $cartItem) {
+            $product = Product::where('id', $cartItem->product_id)->first();
+            OrderItems::firstOrCreate([
+                'order_id' => $order->id,
+                'product_id' => $cartItem->product_id,
+                'qty' => $cartItem->qty,
+                'price' => $cartItem->qty * $product->final_price,
+            ]); 
+        }
+
+        $user->cart->items()->delete();
+        $user->cart->delete();
+
+        // event(new OrderPlaced()); // fire this event to send a email
+        return response()->json(['message' => 'Order successfully placed!'], Response::HTTP_OK);
     }
 }
