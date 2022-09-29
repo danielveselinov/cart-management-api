@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Modules\Cart\Entities\Cart;
 use Modules\Cart\Entities\CartItems;
+use Modules\Cart\Entities\Order;
+use Modules\Cart\Entities\OrderItems;
 use Modules\Category\Entities\Category;
 use Modules\Product\Entities\Product;
 
@@ -43,34 +45,34 @@ class CartTest extends TestCase
         ])->assertUnauthorized();
     }
     
-    public function test_cart_item_qty_updated()
-    {
-        Sanctum::actingAs(User::factory()->create());
+    // public function test_cart_item_qty_updated()
+    // {
+    //     Sanctum::actingAs(User::factory()->create());
 
-        $product = Product::factory()
-                ->for(Category::factory()->create())
-                ->create();
+    //     $product = Product::factory()
+    //             ->for(Category::factory()->create())
+    //             ->create();
 
 
-        $cart = Cart::factory()->create();
-        $cartItem = CartItems::factory()->create();
+    //     $cart = Cart::factory()->create();
+    //     CartItems::factory()->create(['cart_id' => $cart->id]);
         
-        // $response = $this->putJson("api/v1/cart-item/{$cart->id}?cart_id={$cart->id}&product_id=244&qty=2", [
-        //     'cart_id' => $cart->id,
-        //     'product_id' => $product->id,
-        //     'qty' => 2
-        // ]);
+    //     // $response = $this->putJson("api/v1/cart-item/{$cart->id}?cart_id={$cart->id}&product_id=244&qty=2", [
+    //     //     'cart_id' => $cart->id,
+    //     //     'product_id' => $product->id,
+    //     //     'qty' => 2
+    //     // ]);
 
         
-        $response = $this->putJson(route('cart.item.update', $cart->id), [
-                'cart_id' => $cart->id,
-                'product_id' => $product->id,
-                'qty' => 2
-            ]);
+    //     $response = $this->putJson(route('cart.item.update', $cart->id), [
+    //             'cart_id' => $cart->id,
+    //             'product_id' => $product->id,
+    //             'qty' => 2
+    //     ]);
 
-            dd($response);
+    //     dd($response->getContent());
 
-        }
+    // }
 
     public function test_user_try_to_remove_cart_item()
     {
@@ -81,6 +83,14 @@ class CartTest extends TestCase
         $this->deleteJson(route('cart.item.destroy', $cartItem->id))->assertNoContent();
     }
 
+    public function test_user_can_checkout()
+    {
+        $user = Sanctum::actingAs(User::factory()->create(['id'=>1]));
+        $order = Order::factory()->make(['user_id' => 1]);
 
+        $response = $this->postJson(route('cart.checkout'))->assertCreated();
+        $this->assertDatabaseHas('order_items', $response->json());    
+        // dd($respnse->getContent());
+    }
 
 }

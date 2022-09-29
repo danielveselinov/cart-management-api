@@ -10,6 +10,11 @@ class OrderItems extends Model
 {
     use HasFactory;
 
+    protected static function newFactory()
+    {
+        return \Modules\Cart\Database\factories\OrderItemsFactory::new();
+    }
+
     protected $guarded = [];
     
     public function order()
