@@ -53,15 +53,24 @@ class CartTest extends TestCase
 
 
         $cart = Cart::factory()->create();
-
         $cartItem = CartItems::factory()->create();
+        
+        // $response = $this->putJson("api/v1/cart-item/{$cart->id}?cart_id={$cart->id}&product_id=244&qty=2", [
+        //     'cart_id' => $cart->id,
+        //     'product_id' => $product->id,
+        //     'qty' => 2
+        // ]);
 
-        $this->putJson(route('cart.item.update', [$cart->id, $cartItem->id]), [
-            'cart_id' => $cart->id,
-            'product_id' => $product->id,
-            'qty' => 2
-        ])->assertCreated();
-    }
+        
+        $response = $this->putJson(route('cart.item.update', $cart->id), [
+                'cart_id' => $cart->id,
+                'product_id' => $product->id,
+                'qty' => 2
+            ]);
+
+            dd($response);
+
+        }
 
     public function test_user_try_to_remove_cart_item()
     {
@@ -71,5 +80,7 @@ class CartTest extends TestCase
 
         $this->deleteJson(route('cart.item.destroy', $cartItem->id))->assertNoContent();
     }
+
+
 
 }
