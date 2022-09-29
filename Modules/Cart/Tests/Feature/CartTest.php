@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Modules\Cart\Entities\Cart;
+use Modules\Cart\Entities\CartItems;
 use Modules\Category\Entities\Category;
 use Modules\Product\Entities\Product;
 
@@ -29,15 +30,19 @@ class CartTest extends TestCase
 
     public function test_unauthenticated_user_try_to_add_cart_items_to_a_cart_throws_an_error()
     {
+        $product = Product::factory()
+                ->for(Category::factory()->create())
+                ->create();
+
         $cart = Cart::factory()->make();
 
         $this->postJson(route('cart.item.store'), [
             'cart_id' => $cart->id,
-            'product_id' => 1,
+            'product_id' => $product->id,
             'qty' => 1
         ])->assertUnauthorized();
     }
-
+    
     public function test_cart_item_qty_updated()
     {
         Sanctum::actingAs(User::factory()->create());
@@ -49,10 +54,22 @@ class CartTest extends TestCase
 
         $cart = Cart::factory()->create();
 
-        $this->putJson(route('cart.item.update', $cart->id), [
+        $cartItem = CartItems::factory()->create();
+
+        $this->putJson(route('cart.item.update', [$cart->id, $cartItem->id]), [
             'cart_id' => $cart->id,
             'product_id' => $product->id,
             'qty' => 2
         ])->assertCreated();
     }
+
+    public function test_user_try_to_remove_cart_item()
+    {
+        Sanctum::actingAs(User::factory()->create());
+
+        $cartItem = CartItems::factory()->create();
+
+        $this->deleteJson(route('cart.item.destroy', $cartItem->id))->assertNoContent();
+    }
+
 }

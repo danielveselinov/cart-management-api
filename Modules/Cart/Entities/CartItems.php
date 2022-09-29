@@ -10,6 +10,11 @@ class CartItems extends Model
 {
     use HasFactory;
 
+    protected static function newFactory()
+    {
+        return \Modules\Cart\Database\factories\CartItemsFactory::new();
+    }
+
     protected $guarded = [];
     
     public function cart()
