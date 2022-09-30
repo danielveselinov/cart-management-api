@@ -74,14 +74,24 @@ class CartTest extends TestCase
         $this->deleteJson(route('cart.item.destroy', $cartItem->id))->assertNoContent();
     }
 
-    // public function test_user_can_checkout()
-    // {
-    //     $user = Sanctum::actingAs(User::factory()->create(['id'=>1]));
-    //     $order = Order::factory()->make(['user_id' => 1]);
+    public function test_user_can_checkout()
+    {
+        Sanctum::actingAs(User::factory()->create(['id' => 1]));
 
-    //     $response = $this->postJson(route('cart.checkout'))->assertCreated();
-    //     $this->assertDatabaseHas('order_items', $response->json());    
-    //     // dd($respnse->getContent());
-    // }
+        $product = Product::factory()
+                ->for(Category::factory()->create())
+                ->create(['id' => 1]);
+
+        $order = Order::factory()->create(['id' => 1, 'user_id' => 1]);
+
+        $response = $this->postJson(route('cart.checkout', 1), [1]);
+
+        print_r($response->json());
+
+        // $response = $this->postJson(route('cart.checkout'));
+        // dd($response->getContent());
+
+        // $this->assertDatabaseHas('order_items', $response->json());    
+    }
 
 }
