@@ -51,23 +51,18 @@ class CartTest extends TestCase
 
         $product = Product::factory()
                 ->for(Category::factory()->create())
-                ->create();
+                ->create(['id' => 1]);
 
-
-        $cart = Cart::factory()->create();
-        $item = CartItems::factory()
-            // ->forProduct($product)
-            // ->forCart($cart)
-            ->create();
+        Cart::factory()->create(['id' => 1]);
+        $item = CartItems::factory()->create(['cart_id' => 1, 'product_id' => 1]);
         
         $response = $this->putJson(route('cart.item.update', $item->cart->id), [
                 'product_id' => $product->id,
                 'cart_id' => $item->cart->id,
                 'qty' => 2
-        ]);
-
-        dd($response->getContent());
-
+        ])->assertOk();
+        
+        $this->assertDatabaseHas('cart_items', $response->json());
     }
 
     public function test_user_try_to_remove_cart_item()

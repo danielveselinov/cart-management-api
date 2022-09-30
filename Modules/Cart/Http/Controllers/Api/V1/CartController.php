@@ -123,7 +123,7 @@ class CartController extends Controller
         $cartItems->update(['qty' => $request->qty]);
 
         if ($cartItems) {
-            return response()->json($cartItems, Response::HTTP_ACCEPTED);
+            return response()->json($cartItems, Response::HTTP_OK);
         }
 
         return response()->json(['message' => 'There was an error updating your cart item.'], Response::HTTP_NOT_FOUND);
