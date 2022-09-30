@@ -82,16 +82,16 @@ class CartTest extends TestCase
                 ->for(Category::factory()->create())
                 ->create(['id' => 1]);
 
-        $order = Order::factory()->create(['id' => 1, 'user_id' => 1]);
+        $cart = Cart::factory()->create(['id' => 1]);
+        CartItems::factory()->create([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'qty' => 1
+        ]);
 
-        $response = $this->postJson(route('cart.checkout', 1), [1]);
+        Order::factory()->create(['id' => 1, 'user_id' => 1]);
 
-        print_r($response->json());
-
-        // $response = $this->postJson(route('cart.checkout'));
-        // dd($response->getContent());
-
-        // $this->assertDatabaseHas('order_items', $response->json());    
+        $this->postJson(route('cart.checkout', 1), [1])->assertOk();
     }
 
 }
