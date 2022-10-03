@@ -184,7 +184,7 @@ class ProductController extends Controller
      *      path="/api/v1/product/{id}",
      *      operationId="deleteProduct",
      *      tags={"Products"},
-     *      summary="Delete existing product",
+     *      summary="Softdelete existing product",
      *      description="Deletes a record and returns no content",
      *      @OA\Parameter(
      *          name="id",
@@ -281,5 +281,88 @@ class ProductController extends Controller
         $products = $query->get();
 
         return response()->json(new ProductResource($products), Response::HTTP_ACCEPTED);
+    }
+
+    /**
+     * @OA\Delete(
+     *      path="/api/v1/product/{product}/force",
+     *      operationId="forceDeleteProduct",
+     *      tags={"Products"},
+     *      summary="Force delete existing product",
+     *      description="Deletes a record and returns no content",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="Product id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=204,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
+     */
+    public function delete(Product $product)
+    {
+        $product->forceDelete();
+
+        return response()->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/api/v1/product/{product}/restore",
+     *      operationId="restoreProduct",
+     *      tags={"Products"},
+     *      summary="Restore existing product",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="Product id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/ProductResource")
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
+    public function restore($product)
+    {   
+        Product::where('id', $product)->withTrashed()->restore();
+
+        return response()->json(['message' => 'Product restored!'], Response::HTTP_OK);
     }
 }
