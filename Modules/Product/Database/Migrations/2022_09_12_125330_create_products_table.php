@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('description');
             $table->float('old_price')->nullable();
             $table->float('final_price');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
