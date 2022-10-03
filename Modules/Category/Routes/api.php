@@ -21,4 +21,8 @@ Route::middleware('auth:api')->get('/category', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function() {
     Route::apiResource('category', CategoryController::class);
+    
+    Route::delete('category/{category}/force', [CategoryController::class, 'delete'])->name('category.delete');
+    
+    Route::post('category/{category}/restore/', [CategoryController::class, 'restore'])->name('category.restore');
 });
