@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\Cart\Entities\Cart;
 
 class User extends Authenticatable
 {
@@ -50,5 +51,10 @@ class User extends Authenticatable
         $image_path = ($this->image_path) ? "/storage/{$this->image_path}" : asset('images/default-avatar-profile-image.jpg');
 
         return $image_path;
+    }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
     }
 }
