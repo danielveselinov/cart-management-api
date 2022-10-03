@@ -19,6 +19,147 @@
         }
     ],
     "paths": {
+        "/api/v1/cart-item": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Create a cart",
+                "description": "Create a cart for logged in user",
+                "operationId": "cart",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreCartItemRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "New cart is being created"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/api/v1/cart-item/{cart}": {
+            "put": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Update existing cart",
+                "description": "Update existing cart",
+                "operationId": "updateCartItem",
+                "parameters": [
+                    {
+                        "name": "product_id",
+                        "in": "path",
+                        "description": "Product id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "cart_id",
+                        "in": "path",
+                        "description": "Cart id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCartItemRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "202": {
+                        "description": "Cart updated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/cart-item/{cartItemId}": {
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Delete existing cart item",
+                "description": "Delete existing cart item",
+                "operationId": "deleteCart",
+                "parameters": [
+                    {
+                        "name": "cartItemId",
+                        "in": "path",
+                        "description": "Cart Item id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/checkout": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Checkout and place order",
+                "description": "Place an order",
+                "operationId": "checkout",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
         "/api/v1/category": {
             "get": {
                 "tags": [
@@ -731,6 +872,49 @@
     },
     "components": {
         "schemas": {
+            "StoreCartItemRequest": {
+                "title": "StoreCartItemRequest",
+                "description": "Cart Item store request",
+                "required": [
+                    "product_id",
+                    "qty"
+                ],
+                "properties": {
+                    "product_id": {
+                        "title": "Product id",
+                        "description": "Enter product id"
+                    },
+                    "qty": {
+                        "title": "Quantity",
+                        "description": "Enter quantity"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateCartItemRequest": {
+                "title": "UpdateCartItemRequest",
+                "description": "Cart Item update request",
+                "required": [
+                    "cart_id",
+                    "product_id",
+                    "qty"
+                ],
+                "properties": {
+                    "cart_id": {
+                        "title": "Cart id",
+                        "description": "Enter cart id"
+                    },
+                    "product_id": {
+                        "title": "Product id",
+                        "description": "Enter product id"
+                    },
+                    "qty": {
+                        "title": "Quantity",
+                        "description": "Enter quantity"
+                    }
+                },
+                "type": "object"
+            },
             "CreateCategoryRequest": {
                 "title": "CreateCategoryRequest",
                 "description": "Create Category request body data",
@@ -1074,6 +1258,10 @@
         {
             "name": "Products",
             "description": "API Endpoints of Products"
+        },
+        {
+            "name": "Cart",
+            "description": "API Endpoints of Cart"
         }
     ]
 }
