@@ -3,5 +3,6 @@
     "Category": true,
     "Cart": true,
     "Order": true,
-    "Country": true
+    "Country": true,
+    "City": true
 }
