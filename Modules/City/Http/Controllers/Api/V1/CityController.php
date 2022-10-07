@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Modules\City\Entities\City;
 use Modules\City\Http\Requests\CityStoreRequest;
 use Modules\City\Transformers\CityCollection;
+use Modules\City\Transformers\CityResource;
 
 class CityController extends Controller
 {
@@ -29,7 +30,7 @@ class CityController extends Controller
     {
         $city = City::create(['name' => $request->name, 'country_id' => $request->country_id]);
 
-        return response()->json(new CityCollection($city), Response::HTTP_CREATED);
+        return response()->json(new CityResource($city), Response::HTTP_CREATED);
     }
 
     /**

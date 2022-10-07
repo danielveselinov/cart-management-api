@@ -4,5 +4,6 @@
     "Cart": true,
     "Order": true,
     "Country": true,
-    "City": true
+    "City": true,
+    "Address": true
 }
