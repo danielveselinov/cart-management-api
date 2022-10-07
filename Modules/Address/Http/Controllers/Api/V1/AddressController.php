@@ -14,6 +14,11 @@ use Modules\Address\Transformers\AddressResource;
 
 class AddressController extends Controller
 {
+    public function selectAddress()
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      * @return Response

@@ -21,4 +21,5 @@ Route::middleware('auth:api')->get('/address', function (Request $request) {
 
 Route::group(['prefix' => 'v1', 'middleware' => 'auth:sanctum'], function() {
     Route::apiResource('address', AddressController::class)->except('show');
+    Route::post('select/address', [AddressController::class, 'selectAddress'])->name('select.address');
 });
