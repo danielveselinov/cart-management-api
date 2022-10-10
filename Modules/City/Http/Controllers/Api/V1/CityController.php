@@ -13,8 +13,26 @@ use Modules\City\Transformers\CityResource;
 class CityController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     * @return Response
+     * @OA\Get(
+     *      path="/api/v1/city",
+     *      operationId="getCitiesList",
+     *      tags={"Cities"},
+     *      summary="Get list of all cities",
+     *      description="Returns list of all cities",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/CityResource")
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
      */
     public function index()
     {
@@ -22,9 +40,34 @@ class CityController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Response
+     * @OA\Post(
+     *      path="/api/v1/city",
+     *      operationId="storeCity",
+     *      tags={"Cities"},
+     *      summary="Store new city",
+     *      description="Returns city data",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/CityStoreRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/CityResource")
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
      */
     public function store(CityStoreRequest $request)
     {
@@ -33,10 +76,40 @@ class CityController extends Controller
         return response()->json(new CityResource($city), Response::HTTP_CREATED);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int City $city
-     * @return Response
+     /**
+     * @OA\Delete(
+     *      path="/api/v1/city/{id}",
+     *      operationId="deleteCity",
+     *      tags={"Cities"},
+     *      summary="Delete existing city",
+     *      description="Deletes a record and returns no content",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="City id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=204,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
      */
     public function destroy(City $city)
     {

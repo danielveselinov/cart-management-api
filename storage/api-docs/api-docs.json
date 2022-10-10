@@ -441,6 +441,113 @@
                 }
             }
         },
+        "/api/v1/city": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Get list of all cities",
+                "description": "Returns list of all cities",
+                "operationId": "getCitiesList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CityResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Store new city",
+                "description": "Returns city data",
+                "operationId": "storeCity",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CityStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CityResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/city/{id}": {
+            "delete": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Delete existing city",
+                "description": "Deletes a record and returns no content",
+                "operationId": "deleteCity",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/v1/country": {
             "get": {
                 "tags": [
@@ -1179,6 +1286,74 @@
                     },
                     "name": {
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "CityStoreRequest": {
+                "title": "CityStoreRequest",
+                "description": "Create city request body data",
+                "required": [
+                    "name",
+                    "country_id"
+                ],
+                "properties": {
+                    "name": {
+                        "title": "City name",
+                        "description": "Name of the city",
+                        "example": "Shtip"
+                    },
+                    "country_id": {
+                        "title": "Country ID",
+                        "description": "ID of the country",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "CityCollection": {
+                "title": "CityCollection",
+                "description": "City collection",
+                "properties": {
+                    "cities": {
+                        "description": "City Collection",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CityResource"
+                        }
+                    },
+                    "pagination": {
+                        "properties": {
+                            "total": {
+                                "type": "integer"
+                            },
+                            "count": {
+                                "type": "integer"
+                            },
+                            "per_page": {
+                                "type": "integer"
+                            },
+                            "current_page": {
+                                "type": "integer"
+                            },
+                            "total_page": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "CityResource": {
+                "title": "CityResource",
+                "description": "City resource",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "country_id": {
+                        "type": "integer"
                     }
                 },
                 "type": "object"

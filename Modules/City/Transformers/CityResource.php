@@ -3,14 +3,17 @@
 namespace Modules\City\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
+/**
+ * @OA\Schema(
+ *      title="CityResource",
+ *      description="City resource",
+ * )
+ */
 class CityResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request
-     * @return array
+     * @OA\Property(property="name", type="string", ),
+     * @OA\Property(property="country_id", type="integer", ),
      */
     public function toArray($request)
     {
