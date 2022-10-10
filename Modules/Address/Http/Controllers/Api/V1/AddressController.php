@@ -11,12 +11,19 @@ use Modules\Address\Http\Requests\AddressStoreRequest;
 use Modules\Address\Http\Requests\AddressUpdateRequest;
 use Modules\Address\Transformers\AddressCollection;
 use Modules\Address\Transformers\AddressResource;
+use Modules\Cart\Entities\Cart;
 
 class AddressController extends Controller
 {
-    public function selectAddress()
+    public function selectAddress(Request $request)
     {
-        //
+        $address = Address::where('id', $request->id)->first();
+
+        $cart = Cart::where('user_id', Auth::id())->first();
+        $cart->address_id = $address->id;
+        $cart->save();
+
+        return response()->json(['message' => 'Cart address successfully selected!'], Response::HTTP_OK);
     }
 
     /**
