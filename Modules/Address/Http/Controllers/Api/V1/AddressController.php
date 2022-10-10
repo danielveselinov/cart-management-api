@@ -51,7 +51,7 @@ class AddressController extends Controller
      */
     public function index()
     {
-        return response()->json(new AddressCollection(Address::all()), Response::HTTP_OK);
+        return response()->json(new AddressCollection(Address::paginate()), Response::HTTP_OK);
     }
 
       /**

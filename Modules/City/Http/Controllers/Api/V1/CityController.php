@@ -36,7 +36,7 @@ class CityController extends Controller
      */
     public function index()
     {
-        return response()->json(new CityResource(City::all()), Response::HTTP_OK);
+        return response()->json(new CityCollection(City::paginate()), Response::HTTP_OK);
     }
 
     /**
