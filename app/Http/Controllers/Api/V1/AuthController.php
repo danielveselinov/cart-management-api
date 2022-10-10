@@ -17,6 +17,8 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\ResendForgotPasswordRequest;
 use App\Http\Requests\ResendVerificationCodeRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -100,18 +102,24 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $code = rand(1000, 9999);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'password' => Hash::make($request->password),
-            'verification_code' => $code,
-        ]);
-
-        event(new Registered($user));
-
-        return response()->json($user, Response::HTTP_CREATED);
+        try {
+            return DB::transaction(function () use ($request, $code) {
+                $user = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'phone_number' => $request->phone_number,
+                    'password' => Hash::make($request->password),
+                    'verification_code' => $code,
+                ]);
+        
+                event(new Registered($user));
+        
+                return response()->json($user, Response::HTTP_CREATED);
+            });
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -164,20 +172,25 @@ class AuthController extends Controller
      */
     public function verifyAccount(Request $request)
     {
-        $user = User::where('id', '=', $request->id)
-            ->where('verification_code', '=', $request->code)
-            ->first();
-
-        if (!$user) {
-            return response()->json(['message' => 'The given data was invalid.'], Response::HTTP_BAD_REQUEST);
+        try {
+            $user = User::where('id', '=', $request->id)
+                ->where('verification_code', '=', $request->code)
+                ->first();
+    
+            if (!$user) {
+                return response()->json(['message' => 'The given data was invalid.'], Response::HTTP_BAD_REQUEST);
+            }
+    
+            $user->is_active = 1;
+            $user->verification_code = null;
+    
+            $user->update();
+    
+            return response()->json($user, Response::HTTP_CREATED);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        $user->is_active = 1;
-        $user->verification_code = null;
-
-        $user->update();
-
-        return response()->json($user, Response::HTTP_CREATED);
     }
 
     /**
@@ -211,18 +224,23 @@ class AuthController extends Controller
      */
     public function resendVerificationCode(ResendVerificationCodeRequest $request)
     {
-        $user = User::whereEmail($request->email)->first();
-
-        if (!$user) {
-            return response()->json(['message' => 'The given data was invalid.'], Response::HTTP_BAD_REQUEST);
+        try {
+            $user = User::whereEmail($request->email)->first();
+    
+            if (!$user) {
+                return response()->json(['message' => 'The given data was invalid.'], Response::HTTP_BAD_REQUEST);
+            }
+    
+            $user->verification_code = rand(1000, 9999);
+            $user->save();
+    
+            event(new Registered($user));
+    
+            return response()->json(['message' => 'The code was sent to your email account: ' . $request->email], Response::HTTP_OK);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        $user->verification_code = rand(1000, 9999);
-        $user->save();
-
-        event(new Registered($user));
-
-        return response()->json(['message' => 'The code was sent to your email account: ' . $request->email], Response::HTTP_OK);
     }
 
     /**
@@ -256,23 +274,28 @@ class AuthController extends Controller
      */
     public function forgetPassword(ResendForgotPasswordRequest $request)
     {
-        $user = User::whereEmail($request->email)->first();
-
-        if (!$user) {
-            return response()->json(['message' => 'The given data was invalid.'], Response::HTTP_BAD_REQUEST);
+        try {
+            $user = User::whereEmail($request->email)->first();
+    
+            if (!$user) {
+                return response()->json(['message' => 'The given data was invalid.'], Response::HTTP_BAD_REQUEST);
+            }
+    
+            $code = Str::random(64);
+    
+            DB::table('password_resets')->insert([
+                'email' => $request->email,
+                'token' => $code,
+                'created_at' => now()
+            ]);
+    
+            event(new ForgotPassword($user, $code));
+    
+            return response()->json(['message' => 'The code was sent to your email account: ' . $request->email], Response::HTTP_OK);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        $code = Str::random(64);
-
-        DB::table('password_resets')->insert([
-            'email' => $request->email,
-            'token' => $code,
-            'created_at' => now()
-        ]);
-
-        event(new ForgotPassword($user, $code));
-
-        return response()->json(['message' => 'The code was sent to your email account: ' . $request->email], Response::HTTP_OK);
     }
 
     /**
@@ -306,23 +329,28 @@ class AuthController extends Controller
      */
     public function resetPassword(ResetPasswordRequest $request)
     {
-        $user = DB::table('password_resets')
-            ->where([
-                'email' => $request->email,
-                'token' => $request->token
-            ])
-            ->first();
-
-        if (!$user) {
-            return response()->json(['message' => 'The given data was invalid.'], Response::HTTP_BAD_REQUEST);
+        try {
+            $user = DB::table('password_resets')
+                ->where([
+                    'email' => $request->email,
+                    'token' => $request->token
+                ])
+                ->first();
+    
+            if (!$user) {
+                return response()->json(['message' => 'The given data was invalid.'], Response::HTTP_BAD_REQUEST);
+            }
+    
+            $user = User::where('email', $request->email)
+                ->update(['password' => Hash::make($request->password)]);
+    
+            DB::table('password_resets')->where(['email' => $request->email])->delete();
+    
+            return response()->json(['success' => true, 'message' => 'Password updated'], Response::HTTP_OK);
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        $user = User::where('email', $request->email)
-            ->update(['password' => Hash::make($request->password)]);
-
-        DB::table('password_resets')->where(['email' => $request->email])->delete();
-
-        return response()->json(['success' => true, 'message' => 'Password updated'], Response::HTTP_OK);
     }
 
     /**

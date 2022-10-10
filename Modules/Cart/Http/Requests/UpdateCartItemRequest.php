@@ -22,16 +22,19 @@ class UpdateCartItemRequest extends FormRequest
      * @OA\Property(
      *      property="cart_id",
      *      title="Cart id",
+     *      example="1",
      *      description="Enter cart id",
      * ),
      * @OA\Property(
      *      property="product_id",
      *      title="Product id",
+     *      example="1",
      *      description="Enter product id",
      * ),
      * @OA\Property(
      *      property="qty",
      *      title="Quantity",
+     *      example="1",
      *      description="Enter quantity",
      * ),
      */

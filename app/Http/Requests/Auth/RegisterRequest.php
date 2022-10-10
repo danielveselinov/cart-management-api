@@ -31,21 +31,25 @@ class RegisterRequest extends FormRequest
      * @OA\Property(
      *      property="name",
      *      title="Full name",
+     *      example="Daniel",
      *      description="Enter your full name"
      * ),
      * @OA\Property(
      *      property="email",
      *      title="Email address",
+     *      example="daniel@atis.al",
      *      description="Enter your email address",
      * ),
      * @OA\Property(
      *      property="phone_number",
      *      title="Phone Number",
+     *      example="01129392223",
      *      description="Enter your phone number",
      * ),
      * @OA\Property(
      *      property="password",
      *      title="Password",
+     *      example="test$123",
      *      description="Enter a password for your account",
      * ),
      *
@@ -57,7 +61,7 @@ class RegisterRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'phone_number' => 'required|numeric|min:8|unique:users,phone_number',
-            'password' => ['required', Password::min(6)->mixedCase()->symbols()],
+            'password' => ['required', 'confirmed', Password::min(6)->mixedCase()->symbols()],
         ];
     }
 }

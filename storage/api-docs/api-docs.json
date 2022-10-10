@@ -1513,16 +1513,24 @@
                 "description": "Cart Item store request",
                 "required": [
                     "product_id",
-                    "qty"
+                    "qty",
+                    "payment_type_id"
                 ],
                 "properties": {
                     "product_id": {
                         "title": "Product id",
-                        "description": "Enter product id"
+                        "description": "Enter product id",
+                        "example": "1"
                     },
                     "qty": {
                         "title": "Quantity",
-                        "description": "Enter quantity"
+                        "description": "Enter quantity",
+                        "example": "1"
+                    },
+                    "payment_type_id": {
+                        "title": "Payment Type",
+                        "description": "Select payment type",
+                        "example": "2"
                     }
                 },
                 "type": "object"
@@ -1922,19 +1930,23 @@
                 "properties": {
                     "name": {
                         "title": "Full name",
-                        "description": "Enter your full name"
+                        "description": "Enter your full name",
+                        "example": "Daniel"
                     },
                     "email": {
                         "title": "Email address",
-                        "description": "Enter your email address"
+                        "description": "Enter your email address",
+                        "example": "daniel@atis.al"
                     },
                     "phone_number": {
                         "title": "Phone Number",
-                        "description": "Enter your phone number"
+                        "description": "Enter your phone number",
+                        "example": "01129392223"
                     },
                     "password": {
                         "title": "Password",
-                        "description": "Enter a password for your account"
+                        "description": "Enter a password for your account",
+                        "example": "test$123"
                     }
                 },
                 "type": "object"
