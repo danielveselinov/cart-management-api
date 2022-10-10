@@ -19,6 +19,166 @@
         }
     ],
     "paths": {
+        "/api/v1/address": {
+            "get": {
+                "tags": [
+                    "Addresses"
+                ],
+                "summary": "Get list of addresses",
+                "description": "Returns list of addresses",
+                "operationId": "getAddressesList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AddressResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Addresses"
+                ],
+                "summary": "Store new address",
+                "description": "Returns address data",
+                "operationId": "storeAddress",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddressStoreRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AddressResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/address/{id}": {
+            "put": {
+                "tags": [
+                    "Addresses"
+                ],
+                "summary": "Update existing address",
+                "description": "Returns updated address data",
+                "operationId": "updateAddress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Address id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddressUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AddressResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Addresses"
+                ],
+                "summary": "Delete existing address",
+                "description": "Deletes a record and returns no content",
+                "operationId": "deleteAddress",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Address id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/v1/cart-item": {
             "post": {
                 "tags": [
@@ -1169,6 +1329,185 @@
     },
     "components": {
         "schemas": {
+            "AddressStoreRequest": {
+                "title": "AddressStoreRequest",
+                "description": "Create address request body data",
+                "required": [
+                    "user_id",
+                    "country_id",
+                    "city_id",
+                    "area",
+                    "street",
+                    "building",
+                    "apartment",
+                    "landmark",
+                    "is_main"
+                ],
+                "properties": {
+                    "user_id": {
+                        "title": "User ID",
+                        "description": "ID of the User",
+                        "example": "1"
+                    },
+                    "country_id": {
+                        "title": "Country ID",
+                        "description": "ID of the Country",
+                        "example": "1"
+                    },
+                    "city_id": {
+                        "title": "City ID",
+                        "description": "ID of the City",
+                        "example": "1"
+                    },
+                    "area": {
+                        "title": "Area",
+                        "description": "Area",
+                        "example": "Downtown"
+                    },
+                    "street": {
+                        "title": "Street",
+                        "description": "Street",
+                        "example": "Street Eineberg no.24"
+                    },
+                    "building": {
+                        "title": "Bulding",
+                        "description": "Building",
+                        "example": "biggest one on the left, gray"
+                    },
+                    "landmark": {
+                        "title": "Landmark",
+                        "description": "Landmark",
+                        "example": "Landmark here."
+                    },
+                    "is_main": {
+                        "title": "Is main?",
+                        "description": "If is your main address? (1 = true / 0 = false)",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "AddressUpdateRequest": {
+                "title": "AddressUpdateRequest",
+                "description": "Update address request body data",
+                "required": [
+                    "country_id",
+                    "city_id",
+                    "area",
+                    "street",
+                    "building",
+                    "apartment",
+                    "landmark",
+                    "is_main"
+                ],
+                "properties": {
+                    "country_id": {
+                        "title": "Country ID",
+                        "description": "ID of the Country",
+                        "example": "1"
+                    },
+                    "city_id": {
+                        "title": "City ID",
+                        "description": "ID of the City",
+                        "example": "1"
+                    },
+                    "area": {
+                        "title": "Area",
+                        "description": "Area",
+                        "example": "Downtown"
+                    },
+                    "street": {
+                        "title": "Street",
+                        "description": "Street",
+                        "example": "Street Eineberg no.24"
+                    },
+                    "building": {
+                        "title": "Bulding",
+                        "description": "Building",
+                        "example": "biggest one on the left, gray"
+                    },
+                    "landmark": {
+                        "title": "Landmark",
+                        "description": "Landmark",
+                        "example": "Landmark here."
+                    },
+                    "is_main": {
+                        "title": "Is main?",
+                        "description": "If is your main address? (1 = true / 0 = false)",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "AddressCollection": {
+                "title": "AddressCollection",
+                "description": "Address collection",
+                "properties": {
+                    "addresses": {
+                        "description": "Address Collection",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AddressResource"
+                        }
+                    },
+                    "pagination": {
+                        "properties": {
+                            "total": {
+                                "type": "integer"
+                            },
+                            "count": {
+                                "type": "integer"
+                            },
+                            "per_page": {
+                                "type": "integer"
+                            },
+                            "current_page": {
+                                "type": "integer"
+                            },
+                            "total_page": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "AddressResource": {
+                "title": "AddressResource",
+                "description": "Address resource",
+                "properties": {
+                    "user_id": {
+                        "description": "Transform the resource into an array.",
+                        "type": "integer"
+                    },
+                    "country_id": {
+                        "type": "integer"
+                    },
+                    "city_id": {
+                        "type": "integer"
+                    },
+                    "area": {
+                        "type": "string"
+                    },
+                    "street": {
+                        "type": "string"
+                    },
+                    "building": {
+                        "type": "string"
+                    },
+                    "apartment": {
+                        "type": "integer"
+                    },
+                    "landmark": {
+                        "type": "string"
+                    },
+                    "is_main": {
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            },
             "StoreCartItemRequest": {
                 "title": "StoreCartItemRequest",
                 "description": "Cart Item store request",

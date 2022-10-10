@@ -20,18 +20,61 @@ class AddressController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     * @return Response
+     * @OA\Get(
+     *      path="/api/v1/address",
+     *      operationId="getAddressesList",
+     *      tags={"Addresses"},
+     *      summary="Get list of addresses",
+     *      description="Returns list of addresses",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/AddressResource")
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
      */
     public function index()
     {
         return response()->json(new AddressCollection(Address::all()), Response::HTTP_OK);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Response
+      /**
+     * @OA\Post(
+     *      path="/api/v1/address",
+     *      operationId="storeAddress",
+     *      tags={"Addresses"},
+     *      summary="Store new address",
+     *      description="Returns address data",
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/AddressStoreRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/AddressResource")
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
      */
     public function store(AddressStoreRequest $request)
     {
@@ -50,11 +93,48 @@ class AddressController extends Controller
         return response()->json(new AddressResource($address), Response::HTTP_CREATED);
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param Address $address
-     * @return Response
+      /**
+     * @OA\Put(
+     *      path="/api/v1/address/{id}",
+     *      operationId="updateAddress",
+     *      tags={"Addresses"},
+     *      summary="Update existing address",
+     *      description="Returns updated address data",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="Address id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/AddressUpdateRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=202,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/AddressResource")
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
      */
     public function update(AddressUpdateRequest $request, Address $address)
     {
@@ -73,9 +153,39 @@ class AddressController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     * @param Address $address
-     * @return Response
+     * @OA\Delete(
+     *      path="/api/v1/address/{id}",
+     *      operationId="deleteAddress",
+     *      tags={"Addresses"},
+     *      summary="Delete existing address",
+     *      description="Deletes a record and returns no content",
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="Address id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=204,
+     *          description="Successful operation",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
      */
     public function destroy(Address $address)
     {

@@ -4,10 +4,34 @@ namespace Modules\Address\Transformers;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/**
+ * @OA\Schema(
+ *      title="AddressCollection",
+ *      description="Address collection"
+ * ),
+ */
 class AddressCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
+     * 
+     * @OA\Property(
+     *      property="addresses",
+    *       description="Address Collection",
+    *       type="array",
+    *       @OA\Items(
+    *           ref="#/components/schemas/AddressResource"
+    *       )
+     * ),
+     * @OA\Property(
+     *      property="pagination",
+     *      type="object",
+     *      @OA\Property(property="total", type="integer", ),
+     *      @OA\Property(property="count", type="integer", ),
+     *      @OA\Property(property="per_page", type="integer", ),
+     *      @OA\Property(property="current_page", type="integer", ),
+     *      @OA\Property(property="total_page", type="integer")
+     * )
      *
      * @param  \Illuminate\Http\Request
      * @return array
