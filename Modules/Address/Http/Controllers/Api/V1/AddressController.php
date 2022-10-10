@@ -17,6 +17,7 @@ class AddressController extends Controller
 {
     public function selectAddress(Request $request)
     {
+        $request->validate(['id' => 'required']);
         $address = Address::where('id', $request->id)->first();
 
         $cart = Cart::where('user_id', Auth::id())->first();
