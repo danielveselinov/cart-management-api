@@ -21,7 +21,8 @@ class PaymentTypeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => fake()->word(),
+            'type' => fake()->word()
         ];
     }
 }

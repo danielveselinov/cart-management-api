@@ -30,7 +30,7 @@ class AddressFactory extends Factory
             'area' => fake()->city(),
             'street' => fake()->streetName(),
             'building' => fake()->buildingNumber(),
-            'apratment' => fake()->randomNumber(),
+            'apartment' => fake()->randomNumber(),
             'landmark' => fake()->text(120),
             'is_main' => fake()->boolean()
         ];

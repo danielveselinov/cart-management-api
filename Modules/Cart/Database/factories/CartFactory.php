@@ -4,6 +4,8 @@ namespace Modules\Cart\Database\factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\Address\Entities\Address;
+use Modules\PaymentType\Entities\PaymentType;
 
 class CartFactory extends Factory
 {
@@ -23,6 +25,8 @@ class CartFactory extends Factory
     {
         return [
             'user_id' => 1,
+            'address_id' => Address::factory(),
+            'payment_type_id' => PaymentType::factory()
         ];
     }
 }

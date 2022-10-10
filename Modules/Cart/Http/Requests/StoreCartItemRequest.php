@@ -35,7 +35,8 @@ class StoreCartItemRequest extends FormRequest
     {
         return [
             'product_id' => 'required',
-            'qty' => 'required|integer'
+            'qty' => 'required|integer',
+            'payment_type_id' => 'required|integer'
         ];
     }
 
