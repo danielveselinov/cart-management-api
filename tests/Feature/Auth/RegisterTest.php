@@ -13,11 +13,13 @@ class RegisterTest extends TestCase
 
     public function test_new_user_can_register()
     {
+        $password = Hash::make('password');
         $response = $this->postJson(route('auth.register'), [
             'name' => 'John Doe',
             'email' => 'john@email.com',
             'phone_number' => '07550000',
-            'password' => Hash::make('password'),
+            'password' => $password,
+            'password_confirmation' => $password,
             'verification_code' => rand(1000, 9999),
         ])->assertCreated();
 

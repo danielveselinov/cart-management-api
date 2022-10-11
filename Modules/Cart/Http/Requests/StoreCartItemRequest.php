@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
  *      title="StoreCartItemRequest",
  *      description="Cart Item store request",
  *      type="object",
- *      required={"product_id", "qty"}
+ *      required={"product_id", "qty", "payment_type_id"}
  * )
  */
 class StoreCartItemRequest extends FormRequest
@@ -22,12 +22,20 @@ class StoreCartItemRequest extends FormRequest
      * @OA\Property(
      *      property="product_id",
      *      title="Product id",
+     *      example="1",
      *      description="Enter product id",
      * ),
      * @OA\Property(
      *      property="qty",
      *      title="Quantity",
+     *      example="1",
      *      description="Enter quantity",
+     * ),
+     * @OA\Property(
+     *      property="payment_type_id",
+     *      title="Payment Type",
+     *      example="2",
+     *      description="Select payment type",
      * ),
      * 
      */
@@ -35,7 +43,8 @@ class StoreCartItemRequest extends FormRequest
     {
         return [
             'product_id' => 'required',
-            'qty' => 'required|integer'
+            'qty' => 'required|integer',
+            'payment_type_id' => 'required|integer'
         ];
     }
 

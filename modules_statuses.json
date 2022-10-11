@@ -2,5 +2,9 @@
     "Product": true,
     "Category": true,
     "Cart": true,
-    "Order": true
+    "Order": true,
+    "Country": true,
+    "City": true,
+    "Address": true,
+    "PaymentType": true
 }
