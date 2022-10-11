@@ -44,6 +44,26 @@ use Illuminate\Routing\Controller as BaseController;
  *      name="Cart",
  *      description="API Endpoints of Cart"
  * )
+ * 
+ * * @OA\Tag(
+ *      name="Countries",
+ *      description="API Endpoints of Countries"
+ * )
+ * 
+ * * @OA\Tag(
+ *      name="Cities",
+ *      description="API Endpoints of Cities"
+ * )
+ * 
+ * * @OA\Tag(
+ *      name="Addresses",
+ *      description="API Endpoints of Addresses"
+ * )
+ * 
+ * * @OA\Tag(
+ *      name="PaymentTypes",
+ *      description="API Endpoints of PaymentTypes"
+ * )
  */
 class Controller extends BaseController
 {

@@ -1,0 +1,11 @@
+{
+    "name": "PaymentType",
+    "alias": "paymenttype",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\PaymentType\\Providers\\PaymentTypeServiceProvider"
+    ],
+    "files": []
+}

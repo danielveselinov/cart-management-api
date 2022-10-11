@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Modules\Address\Entities\Address;
 use Modules\Cart\Entities\Cart;
 use Modules\Cart\Entities\CartItems;
 use Modules\Cart\Entities\Order;
@@ -14,6 +15,7 @@ use Modules\Cart\Entities\OrderItems;
 use Modules\Cart\Events\OrderPlaced;
 use Modules\Cart\Http\Requests\StoreCartItemRequest;
 use Modules\Cart\Http\Requests\UpdateCartItemRequest;
+use Modules\PaymentType\Entities\PaymentType;
 use Modules\Product\Entities\Product;
 
 class CartController extends Controller
@@ -46,7 +48,12 @@ class CartController extends Controller
      */
     public function store(StoreCartItemRequest $request)
     {
-        $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
+        $address = Address::where('user_id', Auth::id())
+                ->where('is_main', 1)
+                ->first();
+        
+        // address_id is set just to 1 for testing prurposes .. still
+        $cart = Cart::firstOrCreate(['user_id' => Auth::id(), 'address_id' => 1, 'payment_type_id' => $request->payment_type_id]);
 
         $cartItem = CartItems::create([
             'cart_id' => $cart->id,
