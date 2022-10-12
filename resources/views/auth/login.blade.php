@@ -2,16 +2,16 @@
 @section('content')
 <div class="container">
     <div class="col-6 text-center mx-auto">
-        <button class="btn btn-custom btn-lg">Login</button>
-        <button class="btn btn-custom btn-lg">Register</button>
+        <button class="btn btn-xl btn-active">Login</button>
+        <button class="btn btn-custom btn-xl">Register</button>
     </div>
     <form method="POST" action="{{ route('auth.login') }}" class="row justify-content-center">
         <div class="col-12 col-md-6">
             <div class="mb-3">
                 <label for="email_address" class="form-label fw-bolder">Email address</label>
-                <input type="email" class="form-control" id="email_address" name="email_address" placeholder="name@example.com">
+                <input type="email" class="form-control is-invalid" id="email_address" name="email_address" placeholder="name@example.com">
                 <div class="invalid-feedback">
-                    Please provide a valid city.
+                    Please provide a valid email address.
                 </div>
             </div>
             <div class="mb-3">
@@ -21,8 +21,8 @@
         </div>
 
         <div class="text-center">
-            <button class="btn btn-custom-success btn-lg mb-3">Proceed</button>
-            <a href="#" class="btn-link d-block">Forgot your passowrd?</a>
+            <button class="btn btn-custom-success btn-xl mb-3">Proceed</button>
+            <a href="#" class="btn-link text-success fw-bolder d-block">Forgot your passowrd?</a>
         </div>
     </form>
 </div>
