@@ -1120,7 +1120,7 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "New resources being created"
                     },
                     "400": {
@@ -1546,15 +1546,18 @@
                 "properties": {
                     "cart_id": {
                         "title": "Cart id",
-                        "description": "Enter cart id"
+                        "description": "Enter cart id",
+                        "example": "1"
                     },
                     "product_id": {
                         "title": "Product id",
-                        "description": "Enter product id"
+                        "description": "Enter product id",
+                        "example": "1"
                     },
                     "qty": {
                         "title": "Quantity",
-                        "description": "Enter quantity"
+                        "description": "Enter quantity",
+                        "example": "1"
                     }
                 },
                 "type": "object"

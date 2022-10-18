@@ -13,6 +13,11 @@ use Modules\Product\Transformers\ProductCollection;
 
 class CategoryController extends Controller
 {
+    public function __constructor()
+    {
+        $this->middleware(['ensureisadmin'])->except('index');
+    }
+
     /**
      * @OA\Get(
      *      path="/api/v1/category",

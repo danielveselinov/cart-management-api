@@ -13,6 +13,11 @@ use Modules\Product\Transformers\ProductCollection;
 
 class ProductController extends Controller
 {
+    public function __constructor()
+    {
+        $this->middleware(['ensureisadmin'])->except(['index', 'filter']);
+    }
+
     /**
      * @OA\Get(
      *      path="/api/v1/product",
