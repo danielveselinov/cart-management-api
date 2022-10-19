@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->unsignedBigInteger('order_status_id')->after('payment_type_id');
+            $table->unsignedBigInteger('order_status_id')->default(1)->after('payment_type_id');
             $table->foreign('order_status_id')->references('id')->on('order_statuses');
         });
     }
