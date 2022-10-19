@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->unsignedBigInteger('address_id')->after('user_id');
-            $table->foreign('address_id')->references('id')->on('addresses');
+            $table->unsignedBigInteger('order_status_id')->after('payment_type_id');
+            $table->foreign('order_status_id')->references('id')->on('order_statuses');
         });
     }
 
@@ -27,8 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropForeign('address_id');
-            $table->dropColumn('address_id');
-        }); 
+            $table->dropForeign('order_status_id');
+            $table->dropColumn('order_status_id');
+        });
     }
 };

@@ -4,6 +4,7 @@ namespace Modules\OrderStatus\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\OrderStatus\Entities\OrderStatus;
 
 class OrderStatusTableSeeder extends Seeder
 {
@@ -16,6 +17,10 @@ class OrderStatusTableSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $statuses = ['pending', 'preparing', 'on-route', 'delivered'];
+
+        foreach ($statuses as $status) {
+            OrderStatus::create(['status' => $status]);
+        }
     }
 }
