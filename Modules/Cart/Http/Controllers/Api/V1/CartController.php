@@ -216,7 +216,7 @@ class CartController extends Controller
     public function checkout()
     {
         $user = User::where('id', Auth::id())->first();
-        $order = Order::firstOrCreate(['user_id' => $user->cart->id]);
+        $order = Order::firstOrCreate(['user_id' => $user->cart->user_id, 'address_id' => $user->mainAddress(), 'payment_type_id' => $user->cart->payment_type_id]);
         foreach ($user->cart->items as $cartItem) {
             $product = Product::where('id', $cartItem->product_id)->first();
             OrderItems::firstOrCreate([

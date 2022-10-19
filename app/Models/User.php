@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Address\Entities\Address;
 use Modules\Cart\Entities\Cart;
+use Modules\PaymentType\Entities\PaymentType;
 
 class User extends Authenticatable
 {
@@ -64,5 +65,11 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function mainAddress()
+    {
+        $address = Address::where('is_main', 1)->first();
+        return $address->id;
     }
 }
