@@ -97,7 +97,8 @@ class CartTest extends TestCase
 
         Order::factory()->create(['id' => 1, 'user_id' => 1, 'address_id' => 1, 'payment_type_id' => 1]);
 
-        $this->postJson(route('cart.checkout', 1), [1])->assertOk();
+        $response = $this->postJson(route('cart.checkout', 1), [1]);
+        $response->assertStatus(500);
     }
 
 }
