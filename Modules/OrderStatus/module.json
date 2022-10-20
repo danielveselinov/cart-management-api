@@ -1,0 +1,11 @@
+{
+    "name": "OrderStatus",
+    "alias": "orderstatus",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\OrderStatus\\Providers\\OrderStatusServiceProvider"
+    ],
+    "files": []
+}

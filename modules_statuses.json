@@ -6,5 +6,6 @@
     "Country": true,
     "City": true,
     "Address": true,
-    "PaymentType": true
+    "PaymentType": true,
+    "OrderStatus": true
 }
