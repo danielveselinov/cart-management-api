@@ -15,6 +15,27 @@ class OrderStatusController extends Controller
     /**
      * Display a listing of the resource.
      * @return Response
+     * 
+     * @OA\Get(
+     *      path="/api/v1/order-statuses",
+     *      operationId="getOrderStatusesList",
+     *      tags={"OrderStatuses"},
+     *      summary="Get list of order statuses",
+     *      description="Returns list of order statuses",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(ref="#/components/schemas/OrderStatusResource")
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
      */
     public function index()
     {
@@ -22,10 +43,51 @@ class OrderStatusController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param Order $order
-     * @return Response
+     @OA\Put(
+     *      path="/api/v1/update-order-status/{order}",
+     *      operationId="updateOrderStatus",
+     *      tags={"OrderStatuses"},
+     *      summary="Update existing order status",
+     *      description="Update existing order status",
+     *      @OA\Parameter(
+     *          name="order_id",
+     *          description="Order id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="order_status_id",
+     *          description="Order Status id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(ref="#/components/schemas/UpdateOrderStatusRequest")
+     *      ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Order status updated"
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found"
+     *      )
+     * )
      */
     public function update(UpdateOrderStatusRequest $request, Order $order)
     {

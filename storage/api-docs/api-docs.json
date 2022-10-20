@@ -14,7 +14,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000/",
+            "url": "http://localhost/api/v1",
             "description": "API v1 Server"
         }
     ],
@@ -736,6 +736,88 @@
                 }
             }
         },
+        "/order-statuses": {
+            "get": {
+                "tags": [
+                    "OrderStatuses"
+                ],
+                "summary": "Get list of order statuses",
+                "description": "Returns list of order statuses",
+                "operationId": "getOrderStatusesList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderStatusResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/v1/update-order-status/{order}": {
+            "put": {
+                "tags": [
+                    "OrderStatuses"
+                ],
+                "summary": "Update existing order status",
+                "description": "Update existing order status",
+                "operationId": "updateOrderStatus",
+                "parameters": [
+                    {
+                        "name": "order_id",
+                        "in": "path",
+                        "description": "Order id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "order_status_id",
+                        "in": "path",
+                        "description": "Order Status id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "200": {
+                        "description": "Order status updated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
         "/api/v1/product": {
             "get": {
                 "tags": [
@@ -1120,7 +1202,7 @@
                     }
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "New resources being created"
                     },
                     "400": {
@@ -1756,6 +1838,36 @@
                 },
                 "type": "object"
             },
+            "UpdateOrderStatusRequest": {
+                "title": "UpdateOrderStatusRequest",
+                "description": "Order status update request",
+                "required": [
+                    "order_id",
+                    "order_status_id"
+                ],
+                "properties": {
+                    "order_status_id": {
+                        "title": "Order Status id",
+                        "description": "Enter order status id",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "OrderStatusResource": {
+                "title": "OrderStatusResource",
+                "description": "Order status resource",
+                "properties": {
+                    "id": {
+                        "description": "Transform the resource into an array.",
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "CreateProductRequest": {
                 "title": "CreateProductRequest",
                 "description": "Create Product request body data",
@@ -2045,6 +2157,10 @@
         {
             "name": "PaymentTypes",
             "description": "API Endpoints of PaymentTypes"
+        },
+        {
+            "name": "OrderStatuses",
+            "description": "API Endpoints of Order Stuses"
         }
     ]
 }
